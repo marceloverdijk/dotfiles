@@ -6,8 +6,8 @@ Run this:
 
 ```
 cd ~
-git clone git@github.com:marceloverdijk/dotfiles.git
+git clone git@github.com:marceloverdijk/dotfiles.git ~/.dotfiles
 vi .bash_profile
 ```
 
-and add `source ~/dotfiles/.bash_profile.sh`
+and add `source ~/.dotfiles/.bash_profile.sh`
