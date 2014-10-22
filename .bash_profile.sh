@@ -1,5 +1,5 @@
-source ~/dotfiles/git/.git-completion.sh
-source ~/dotfiles/git/.git-prompt.sh
+source ~/.dotfiles/git/.git-completion.sh
+source ~/.dotfiles/git/.git-prompt.sh
 
 export CLICOLOR=1
 export GREP_OPTIONS='--color=auto'
