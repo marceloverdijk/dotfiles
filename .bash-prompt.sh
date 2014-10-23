@@ -1,43 +1,48 @@
 export GIT_PS1_SHOWCOLORHINTS=true
-export GIT_PS1_SHOWDIRTYSTATE=true
-export GIT_PS1_SHOWSTASHSTATE=true
-export GIT_PS1_SHOWUNTRACKEDFILES=true
 
-reset='\033[0m'
-red='\033[0;31m'
-green='\033[0;32m'
-magenta='\033[0;35'
-bred='\033[1;31m'
+YELLOW="\[\e[0;33m\]"
+ORANGE="\e[1;31m\]"
+RED="\[\e[0;31m\]"
+MAGENTA="\[\e[0;35m\]"
+VIOLET="\e[1;35m\]"
+BLUE="\[\e[0;34m\]"
+CYAN="\[\e[0;36m\]"
+GREEN="\[\e[0;32m\]"
+WHITE="\e[0;37m\]"
+BWHITE="\e[1;37m\]"
+COLOREND="\[\e[00m\]"
 
-# Status of last command (for prompt)
-function __stat() {
-    if [ $? -eq 0 ]; then
-        echo -en "$green[v]$reset"
+working_directory() {
+  dir=`pwd`
+  in_home=0
+  if [[ `pwd` =~ ^"$HOME"(/|$) ]]; then
+    dir="~${dir#$HOME}"
+    in_home=1
+  fi
+  workingdir="$dir"
+  # TODO make workingdir responsive
+  echo -e "${YELLOW}$workingdir${COLOREND} "
+}
+
+parse_git_branch() {
+  branch=`__git_ps1 "%s"`
+  if [[ $branch != "" ]]; then
+    if [[ $(git status 2> /dev/null | tail -n1) == "nothing to commit, working directory clean" ]]; then
+      echo "(${GREEN}$branch${COLOREND}) "
     else
-        echo -en "$red[x]$reset"
+      echo "(${ORANGE}$branch${COLOREND}) "
     fi
+  fi
 }
 
-# set up command prompt
-function __prompt_command() {
+prompt() {
+  if [[ $? -eq 0 ]]; then
+    exit_status="\$ "
+  else
+    exit_status="${RED}\$${COLOREND} "
+  fi
 
-    EXIT="$?" # capture the exit status of the last command
-    PS1=""
-
-    if [ $EXIT -eq 0 ]; then PS1+="\[$green\][v]\[$reset\] "; else PS1+="\[$red\][x]\[$reset\] "; fi
-    PS1+="\[$bred\]\u\[$reset\]@\[$bred\]\h\[$reset\]"
-    PS1+=":\[$brmagenta\]\w\[$reset\]"
-    PS1+='$(__git_ps1 " (%s)")'
-    PS1+="\$ "
+  PS1="$(working_directory)$(parse_git_branch)$exit_status"
 }
 
-#PS1=''
-#PS1+='$(__stat) $reset'             # command status
-#PS1+='$bred\u$reset@$bred\h$reset'  # user@hostname
-#PS1+=':$magenta\w$reset'            # working dir
-#PS1+='$(__git_ps1 " (%s)")'         # git
-#PS1+='\$ '                          # $
-
-#export PS1
-
-PROMPT_COMMAND=__prompt_command
+PROMPT_COMMAND=prompt
