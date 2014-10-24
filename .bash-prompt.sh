@@ -40,7 +40,7 @@ prompt() {
     exit_status="${RED}\$${COLOREND} "
   fi
 
-  PS1="${VIOLET}\u$@\h${COLOREND} $(working_directory)$(parse_git_branch)\n$exit_status"
+  PS1="${BLUE}\u${COLOREND}@${VIOLET}\h${COLOREND} $(working_directory)$(parse_git_branch)\n$exit_status"
 }
 
 PROMPT_COMMAND=prompt
