@@ -8,8 +8,6 @@ VIOLET="\e[1;35m\]"
 BLUE="\[\e[0;34m\]"
 CYAN="\[\e[0;36m\]"
 GREEN="\[\e[0;32m\]"
-WHITE="\e[0;37m\]"
-BWHITE="\e[1;37m\]"
 COLOREND="\[\e[00m\]"
 
 working_directory() {
