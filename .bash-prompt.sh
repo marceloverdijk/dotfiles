@@ -1,4 +1,8 @@
-export GIT_PS1_SHOWCOLORHINTS=true
+export GIT_PS1_SHOWDIRTYSTATE=1
+export GIT_PS1_SHOWUNTRACKEDFILES=1
+export GIT_PS1_SHOWUPSTREAM="auto"
+
+source /Applications/Xcode.app/Contents/Developer/usr/share/git-core/git-prompt.sh
 
 YELLOW="\[\e[0;33m\]"
 ORANGE="\e[1;31m\]"

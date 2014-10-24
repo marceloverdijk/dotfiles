@@ -8,5 +8,5 @@ alias e="atom"
 alias edit="atom"
 
 source ~/.dotfiles/.bash-prompt.sh
-source ~/.dotfiles/git/.git-completion.sh
-source ~/.dotfiles/git/.git-prompt.sh
+
+source /Applications/Xcode.app/Contents/Developer/usr/share/git-core/git-completion.bash
