@@ -30,9 +30,9 @@ parse_git_branch() {
   branch=`__git_ps1 "%s"`
   if [[ $branch != "" ]]; then
     if [[ $(git status 2> /dev/null | tail -n1) == "nothing to commit, working directory clean" ]]; then
-      echo "(${GREEN}$branch${COLOREND}) "
+      echo "${GREEN}($branch)${COLOREND} "
     else
-      echo "(${ORANGE}$branch${COLOREND}) "
+      echo "${ORANGE}($branch)${COLOREND} "
     fi
   fi
 }
