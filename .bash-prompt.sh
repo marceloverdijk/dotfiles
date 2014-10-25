@@ -15,15 +15,37 @@ GREEN="\[\e[0;32m\]"
 COLOREND="\[\e[00m\]"
 
 working_directory() {
-  dir=`pwd`
-  in_home=0
-  if [[ `pwd` =~ ^"$HOME"(/|$) ]]; then
-    dir="~${dir#$HOME}"
-    in_home=1
-  fi
-  workingdir="$dir"
-  # TODO make workingdir responsive
-  echo -e "${YELLOW}$workingdir${COLOREND} "
+  # see http://stackoverflow.com/questions/26554713/how-to-truncate-working-directory-in-prompt-to-show-first-and-last-folder
+  cwd=`pwd | awk -F/ -v "n=$(tput cols)" -v "h=^$HOME" '{sub(h,"~");n=0.7*n;b=$1"/"$2} length($0)<=n || NF==3 {print;next;} NF>3{b=b"/../"; e=$NF; n-=length(b $NF); for (i=NF-1;i>3 && n>length($i)+1;i--) e=$i"/"e;} {print b e;}'`
+
+  # dir=`pwd`
+  # if [[ `pwd` =~ ^"$HOME"(/|$) ]]; then
+  #   dir="~${dir#$HOME}"
+  # fi
+  # cwd=""
+  # if [[ $dir == "/" ]]; then
+  #   cwd+="/"
+  # fi
+  #
+  # while IFS='/' read -ra subdirs; do
+  #   for subdir in "${subdirs[@]}"; do
+  #     if [[ $subdir != "~" ]]; then
+  #       cwd+="/"
+  #     fi
+  #     cwd+=$subdir
+  #   done
+  # done <<< "$dir"
+
+
+
+  # for subdir in $(echo $dir | tr "/" "\n"); do
+  #   if [[ $subdir != "~" ]]; then
+  #     cwd+="/"
+  #   fi
+  #   cwd+=${subdir:0:1}
+  # done
+  # cwd+=${subdir:1}
+  echo "${YELLOW}$cwd${COLOREND} "
 }
 
 parse_git_branch() {
