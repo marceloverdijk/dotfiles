@@ -2,7 +2,7 @@ export GIT_PS1_SHOWDIRTYSTATE=1
 export GIT_PS1_SHOWUNTRACKEDFILES=1
 export GIT_PS1_SHOWUPSTREAM="auto"
 
-source /Applications/Xcode.app/Contents/Developer/usr/share/git-core/git-prompt.sh
+source $DOTFILES_HOME/git/git-prompt.sh
 
 YELLOW="\[\e[0;33m\]"
 ORANGE="\e[1;31m\]"
@@ -53,16 +53,18 @@ prompt() {
   # get current working directory
 
   cwd_max_length=$((`tput cols` - $prompt_length - 1)) # terminal width - prompt_length - space
-
-  # TODO work this out (as i don't understand the syntax)
-  local PRE=
-  NAME=`pwd`
-  LENGTH=$cwd_max_length
-  [[ "$NAME" != "${NAME#$HOME/}" || -z "${NAME#$HOME}" ]] && PRE+='~' NAME="${NAME#$HOME}" LENGTH=$[LENGTH-1];
-  ((${#NAME}>$LENGTH)) && NAME="/...${NAME:$[${#NAME}-LENGTH+4]}";
-  # echo "prename = $PRE$NAME"
-
-  cwd=$PRE$NAME
+  cwd=`pwd`
+  cwd_prefix=""
+  if [[ $cwd =~ ^"$HOME"(/|$) ]]; then
+    cwd_max_length=$(( $cwd_max_length - 1 )) # -1 because of cwd_prefix (~)
+    cwd_prefix="~"
+    cwd="${cwd#$HOME}" # remove home subpath
+  fi
+  if [[ ${#cwd} -gt $cwd_max_length ]]; then
+    offset=$(( ${#cwd} - $cwd_max_length + 4 )) # -4 because of /...
+    cwd="/...${cwd:$offset}"
+  fi
+  cwd=$cwd_prefix$cwd # prefix cwd with ~ if needed
 
   # and finally set ps1
 
