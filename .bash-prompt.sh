@@ -15,6 +15,16 @@ GREEN="\[\e[0;32m\]"
 COLOREND="\[\e[00m\]"
 
 working_directory() {
+
+  local PRE=
+  NAME=`pwd`
+  LENGTH=30
+  [[ "$NAME" != "${NAME#$HOME/}" || -z "${NAME#$HOME}" ]] && PRE+='~' NAME="${NAME#$HOME}" LENGTH=$[LENGTH-1];
+  ((${#NAME}>$LENGTH)) && NAME="/...${NAME:$[${#NAME}-LENGTH+4]}";
+  # echo "prename = $PRE$NAME"
+
+
+
   max_length=$(expr `tput cols` - 40)
   dir=`pwd`
   if [[ `pwd` =~ ^"$HOME"(/|$) ]]; then
