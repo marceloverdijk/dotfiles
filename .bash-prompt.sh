@@ -28,7 +28,7 @@ prompt() {
 
   prompt_length=0
 
-  # get user@hostname (we user variables here instead of \u and \h to calculate prompt lenght)
+  # get user@hostname (we use variables here instead of \u and \h to calculate prompt lenght)
 
   user=$USER
   hostname=${HOSTNAME%%.*}
