@@ -14,73 +14,59 @@ CYAN="\[\e[0;36m\]"
 GREEN="\[\e[0;32m\]"
 COLOREND="\[\e[00m\]"
 
-working_directory() {
-
-  local PRE=
-  NAME=`pwd`
-  LENGTH=30
-  [[ "$NAME" != "${NAME#$HOME/}" || -z "${NAME#$HOME}" ]] && PRE+='~' NAME="${NAME#$HOME}" LENGTH=$[LENGTH-1];
-  ((${#NAME}>$LENGTH)) && NAME="/...${NAME:$[${#NAME}-LENGTH+4]}";
-  # echo "prename = $PRE$NAME"
-
-
-
-  max_length=$(expr `tput cols` - 40)
-  dir=`pwd`
-  if [[ `pwd` =~ ^"$HOME"(/|$) ]]; then
-    dir="~${dir#$HOME}"
-  fi
-  if [[ $max_length -lt 30 ]]; then
-    cwd=${PWD##*/}
-  elif [[ $max_length -gt ${#dir} ]]; then
-    cwd=$dir
-  else
-    # see http://stackoverflow.com/questions/26554713/how-to-truncate-working-directory-in-prompt-to-show-first-and-last-folder
-    # cwd=`pwd | awk -F/ -v "n=$(tput cols)" -v "h=^$HOME" '{sub(h,"~");n=n-40;b=$1"/"$2} length($0)<=n || NF==3 {print;next;} NF>3{b=b"/../"; e=$NF; n-=length(b $NF); for (i=NF-1;i>3 && n>length($i)+1;i--) e=$i"/"e;} {print b e;}'`
-
-    while IFS='/' read -ra subdirs; do
-      length=${#subdirs[@]}
-
-      # refactor below
-      for (( i=${length}; i>0; i-- )); do
-        if [[ $i == $length && $i != 1 ]]; then
-          cwd="/${subdirs[$i-1]}"
-        elif [[ $i == 1 ]]; then
-          if [[ ${subdirs[$i-1]} == "~" ]]; then
-            cwd="~$cwd"
-          else
-            cwd="/${subdirs[$i-1]}$cwd"
-          fi
-        else
-          cwd="/${subdirs[$i-1]:0:1}$cwd"
-        fi
-      done
-      # refactor below end
-
-    done <<< "$dir"
-  fi
-  echo "${YELLOW}$cwd${COLOREND} "
-}
-
-parse_git_branch() {
-  branch=`__git_ps1 "%s"`
-  if [[ $branch != "" ]]; then
-    if [[ $(git status 2> /dev/null | tail -n1) == "nothing to commit, working directory clean" ]]; then
-      echo "${GREEN}($branch)${COLOREND} "
-    else
-      echo "${ORANGE}($branch)${COLOREND} "
-    fi
-  fi
-}
-
 prompt() {
+
+  # get exit status (we need to this before any other external command is executed)
+
   if [[ $? -eq 0 ]]; then
     exit_status="\$ "
   else
     exit_status="${RED}\$${COLOREND} "
   fi
 
-  PS1="${BLUE}\u${COLOREND}@${VIOLET}\h${COLOREND} $(working_directory)$(parse_git_branch)\n$exit_status"
+  # keep track of the prompt length (so we can make the cwd responsive)
+
+  prompt_length=0
+
+  # get user@hostname (we user variables here instead of \u and \h to calculate prompt lenght)
+
+  user=$USER
+  hostname=${HOSTNAME%%.*}
+
+  prompt_length=$(( $prompt_length + ${#user} + 1 + ${#hostname} + 1 )) # + user + @ + hostname + space
+
+  # get git branch
+
+  git_branch=`__git_ps1 "%s"`
+
+  if [[ $git_branch != "" ]]; then
+
+    prompt_length=$(( $prompt_length + 1 + ${#git_branch} + 1 )) # + ( + git_brach + )
+
+    if [[ $(git status 2> /dev/null | tail -n1) == "nothing to commit, working directory clean" ]]; then
+      git_branch="${GREEN}($git_branch)${COLOREND}"
+    else
+      git_branch="${ORANGE}($git_branch)${COLOREND}"
+    fi
+  fi
+
+  # get current working directory
+
+  cwd_max_length=$((`tput cols` - $prompt_length - 1)) # terminal width - prompt_length - space
+
+  # TODO work this out (as i don't understand the syntax)
+  local PRE=
+  NAME=`pwd`
+  LENGTH=$cwd_max_length
+  [[ "$NAME" != "${NAME#$HOME/}" || -z "${NAME#$HOME}" ]] && PRE+='~' NAME="${NAME#$HOME}" LENGTH=$[LENGTH-1];
+  ((${#NAME}>$LENGTH)) && NAME="/...${NAME:$[${#NAME}-LENGTH+4]}";
+  # echo "prename = $PRE$NAME"
+
+  cwd=$PRE$NAME
+
+  # and finally set ps1
+
+  PS1="${BLUE}$user${COLOREND}@${VIOLET}$hostname${COLOREND} ${YELLOW}$cwd${COLOREND} $git_branch\n$exit_status"
 }
 
 PROMPT_COMMAND=prompt
