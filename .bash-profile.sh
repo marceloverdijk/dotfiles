@@ -10,3 +10,4 @@ alias edit="atom"
 
 source $DOTFILES_HOME/.bash-prompt.sh
 source $DOTFILES_HOME/git/git-completion.bash
+source $DOTFILES_HOME/gradle/gradle-completion.bash
