@@ -9,6 +9,8 @@ alias e="atom"
 alias edit="atom"
 
 source $DOTFILES_HOME/.bash-prompt.sh
+
+# Source https://github.com/Bash-it/bash-it
 source $DOTFILES_HOME/git/git-completion.bash
 source $DOTFILES_HOME/gradle/gradle-completion.bash
 source $DOTFILES_HOME/sdkman/sdkman-completion.bash
