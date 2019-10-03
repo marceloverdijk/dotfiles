@@ -5,7 +5,7 @@ export GIT_PS1_SHOWUPSTREAM="auto"
 source $DOTFILES_HOME/git/git-prompt.sh
 
 YELLOW="\[\e[0;33m\]"
-ORANGE="\e[1;31m\]"
+ORANGE="\[\e[1;31m\]"
 RED="\[\e[0;31m\]"
 MAGENTA="\[\e[0;35m\]"
 VIOLET="\[\e[1;35m\]"
