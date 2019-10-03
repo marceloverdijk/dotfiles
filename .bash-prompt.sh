@@ -43,7 +43,7 @@ prompt() {
 
     prompt_length=$(( $prompt_length + 1 + ${#git_branch} + 1 )) # + ( + git_brach + )
 
-    if [[ $(git status 2> /dev/null | tail -n1) == "nothing to commit, working directory clean" ]]; then
+    if [[ $(git status 2> /dev/null | tail -n1) == "nothing to commit, working tree clean" ]]; then
       git_branch="${GREEN}($git_branch)${COLOREND}"
     else
       git_branch="${ORANGE}($git_branch)${COLOREND}"
