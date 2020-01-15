@@ -31,11 +31,12 @@ Instead this `README` contains steps to setup a new environment.
    ```
    See the list of available plugins [here](https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins)
  * Download and install the [Fira Code](https://github.com/tonsky/FiraCode) monospaced font
+ * Download and install the [JetBranins Mono](https://www.jetbrains.com/lp/mono/) monospaced font
  * Download the [Atom One Dark](https://github.com/nathanbuchar/atom-one-dark-terminal) color scheme for Terminal and
    iTerm2 (a copy is also stored in this repository)
  * Configure the [Atom One Dark](https://github.com/nathanbuchar/atom-one-dark-terminal/blob/master/scheme/terminal/One%20Dark.terminal)
    color scheme in Terminal
- * Configure the `Fira Code` font in Terminal
+ * Configure the `JetBrains Mono` font in Terminal
  * Download and install the [iTerm2](https://iterm2.com/) terminal
  * Configure the [Atom One Dark](https://github.com/nathanbuchar/atom-one-dark-terminal/blob/master/scheme/iterm/One%20Dark.itermcolors)
    color scheme in iTerm2:
@@ -44,12 +45,12 @@ Instead this `README` contains steps to setup a new environment.
    Apply them in iTerm through iTerm → preferences → profiles → colors → load presets.
    ```
    More iTerm2 color schemes can be found on https://iterm2colorschemes.com/
- * Configure the `Fira Code` font in iTerm2 (don't forget to set the non-ASCII font as well and to enable the ligatures)
+ * Configure the `JetBrains Mono` font in iTerm2 (don't forget to set the non-ASCII font as well and to enable the ligatures)
  * Download and install the [Hyper](https://hyper.is/) terminal
- * Configure the `Fira Code` font and `Atom Dark` plugin in Hyper like:
+ * Configure the `JetBrains Mono` font and `Atom Dark` plugin in Hyper like:
    ```
    fontSize: 14,
-   fontFamily: '"Fira Code", ..',
+   fontFamily: '"JetBrains Mono", ..',
    plugins: [
      'hyperterm-atom-dark'
    ],
